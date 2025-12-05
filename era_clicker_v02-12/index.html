@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Era Clicker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="era-stone_age"> <h1 class="game-title">Era Clicker</h1>
+
+    <div class="game-container">
+
+        <div class="column-left">
+            <div class="game-panel stats-section">
+                <div>
+                    <span id="knowledge-display" class="stat-value">0</span>
+                    <span class="stat-label">Connaissance</span>
+                </div>
+                <div>
+                    <span id="kps-display" class="stat-value">0</span>
+                    <span class="stat-label">par sec.</span>
+
+                    
+                </div>
+            </div>
+
+            <div class="game-panel clicker-section">
+                <div class="era-controls">
+                    <button id="prev-era-button" class="era-nav-button" style="display:none;"></button>
+                    
+                    <span id="era-display" class="current-era-label">Âge de Pierre</span>
+                    
+                    <button id="next-era-button" class="era-nav-button" style="display:none;"></button>
+                </div>
+                
+                <button id="main-click-button"></button>
+                <p id="action-label" class="action-text">Rassembler des pierres</p>
+                
+                <p>Connaissance/clic : <span id="click-value-display">1</span></p>
+                
+            </div>
+        </div>
+
+        <div class="column-middle">
+            <div class="game-panel visual-canvas-section">
+                <h2>Mon Territoire</h2>
+                <div id="visual-canvas">
+                    </div>
+            </div>
+        </div>
+
+        <div class="column-right">
+            <div class="game-panel upgrade-section">
+                <h2>Améliorations</h2>
+                <div id="upgrades-container"></div> 
+            </div>
+
+            <div class="game-panel era-section">
+                <h2>Évolution</h2>
+                <button id="advance-era-button" disabled>
+                </button>
+                <button id="reset-game-button" style="margin-top: 10px; background: #ef4444; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">
+                    ☠️ Recommencer à zéro
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/babel" src="js/ReactUpgrades.js"></script>
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
