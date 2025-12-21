@@ -48,8 +48,7 @@ function UpgradeList({ upgradesData, currentEra, money }) {
     );
 }
 
-// --- MODIFICATION DE SÉCURITÉ ---
-// On crée la racine en dehors, mais on s'assure que l'élément existe
+// On s'assure que l'élément existe
 const rootElement = document.getElementById('upgrades-container');
 let root = null;
 

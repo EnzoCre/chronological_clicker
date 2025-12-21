@@ -11,7 +11,7 @@ export let gameState = {
     }
 };
 
-// Les améliorations sont ici car leur propriété "owned" change
+// Améliorations
 export let upgrades = {
     'sharp_stone': {
         name: 'Pierre taillée', description: '+1 Connaissance par clic',

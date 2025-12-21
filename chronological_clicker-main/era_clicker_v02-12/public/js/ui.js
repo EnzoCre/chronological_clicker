@@ -1,6 +1,6 @@
 import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
-import { formatNumber, calculateCost } from './utils.js';
+import { formatNumber } from './utils.js';
 
 // Références DOM
 const knowledgeDisplay = document.getElementById('knowledge-display');
@@ -21,18 +21,11 @@ export function renderVisualCanvas() {
     eraVisuals.forEach(visual => {
         let element;
 
-        // Si c'est une image (Pierre, Mammouth, etc.)
         if (visual.isImage) {
             element = document.createElement('img');
-            element.src = visual.icon; // Ici 'icon' contient le chemin de l'image (ex: images/...png)
+            element.src = visual.icon; 
             element.className = 'visual-upgrade-icon visual-image';
         } 
-        // Si c'est un vieil émoji (pour les futures ères ou compatibilité)
-        else {
-            element = document.createElement('span');
-            element.innerText = visual.icon;
-            element.className = 'visual-upgrade-icon';
-        }
 
         element.title = visual.name;
         element.style.left = `${visual.x}%`;
@@ -43,33 +36,49 @@ export function renderVisualCanvas() {
     });
 }
 
-// On modifie la signature pour accepter visualSource et isImage
 export function addVisualToCanvas(upgrade, visualSource, isImage) {
-    // Si aucun visualSource n'est fourni, on garde l'icône par défaut
     const finalIcon = visualSource || upgrade.icon;
-    
-    // Si isImage n'est pas défini, on considère que c'est false
     const finalIsImage = isImage || false;
 
     if (!finalIcon) return;
 
-    const x = Math.random() * 80 + 10;
-    const y = Math.random() * 80 + 10;
-    const rotation = Math.random() * 40 - 20;
+    let minX = 10, maxX = 90;
+    let minY = 10, maxY = 90;
 
+    if (gameState.currentEra === 'stone_age') {
+
+        if (upgrade.name === 'Pierre taillée') {
+            minX = 3;  maxX = 30;
+            minY = 15; maxY = 40;
+        } 
+        else if (upgrade.name === 'Mammouth') {
+            minX = 60; maxX = 85;
+            minY = 15; maxY = 50;
+        }
+        else if (upgrade.name === 'Cueilleur') {
+            minX = 5;  maxX = 85;
+            minY = 60; maxY = 80;
+        }
+        else {
+            minX = 20; maxX = 80;
+            minY = 20; maxY = 80;
+        }
+    }
+
+    // Position aléatoire DANS les limites définies
+    const x = Math.random() * (maxX - minX) + minX;
+    const y = Math.random() * (maxY - minY) + minY;
+    
     gameState.visualState[gameState.currentEra].push({
-        icon: finalIcon, // On sauvegarde le chemin de l'image OU l'émoji
+        icon: finalIcon,
         name: upgrade.name,
         x: x,
         y: y,
-        rotation: rotation,
-        isImage: finalIsImage // IMPORTANT : On sauvegarde si c'est une image ou non pour le rechargement
+        isImage: finalIsImage
     });
     
     renderVisualCanvas();
 }
-
-
 
 export function updateUI() {
     knowledgeDisplay.innerText = formatNumber(gameState.knowledge);
@@ -78,7 +87,14 @@ export function updateUI() {
 
     const currentEraData = ERAS[gameState.currentEra];
     eraDisplay.innerText = currentEraData.name;
-    mainClickButton.innerText = currentEraData.clickerText;
+    
+    // On met à jour le texte sous le bouton principal au lieu du bouton lui-même
+    // car le bouton est devenu une image vide
+    const actionLabel = document.getElementById('action-label');
+    if (actionLabel) {
+        actionLabel.innerText = currentEraData.clickerText;
+    }
+    
     document.body.className = `era-${gameState.currentEra}`;
 
     // Bouton avancer
@@ -97,21 +113,8 @@ export function updateUI() {
     nextEraButton.style.display = (currentEraData.nextEra && gameState.currentEra !== gameState.maxEraReached) ? 'inline-block' : 'none';
     nextEraButton.innerText = `➡️`;
     
-    // --- NOUVEAU : Appel à React ---
-    // Si la fonction React est prête (chargée), on lui envoie les données
+    // Appel à React
     if (window.renderReactApp) {
-        // On passe l'état complet des améliorations, l'ère actuelle, et l'argent du joueur
         window.renderReactApp(upgrades, gameState.currentEra, gameState.knowledge);
     }
-    
-    // Boutons upgrade
-    /*
-    document.querySelectorAll('.upgrade-button').forEach(button => {
-        const upgrade = upgrades[button.dataset.id];
-        const cost = calculateCost(upgrade);
-        button.querySelector('.upgrade-cost').innerText = formatNumber(cost);
-        button.querySelector('.upgrade-owned').innerText = `Possédés : ${upgrade.owned}`;
-        button.disabled = gameState.knowledge < cost;
-    });
-    */
 }

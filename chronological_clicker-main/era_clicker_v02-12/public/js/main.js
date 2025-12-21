@@ -12,7 +12,7 @@ window.gameBridge = {
     }
 };
 
-// 🚩 Variable pour savoir si on est en train de réinitialiser le jeu
+// Variable pour savoir si on est en train de réinitialiser le jeu
 let isResetting = false;
 
 function initializeGame() {
@@ -22,19 +22,14 @@ function initializeGame() {
     document.getElementById('prev-era-button').addEventListener('click', handlePrevEra);
     document.getElementById('next-era-button').addEventListener('click', handleNextEra);
 
-    // --- LOGIQUE DU BOUTON RESET CORRIGÉE ---
+    // BOUTON RESET
     const resetButton = document.getElementById('reset-game-button');
     if (resetButton) {
         resetButton.addEventListener('click', () => {
             const confirmReset = confirm("Es-tu sûr de vouloir TOUT effacer et recommencer à zéro ?");
             if (confirmReset) {
-                // 1. On lève le drapeau : "Interdit de sauvegarder !"
                 isResetting = true; 
-                
-                // 2. On supprime la sauvegarde
                 localStorage.removeItem('eraClickerSave_v1');
-                
-                // 3. On recharge la page
                 location.reload();
             }
         });
@@ -55,7 +50,7 @@ function initializeGame() {
 
     // Sauvegarde en quittant la page
     window.addEventListener('beforeunload', () => { 
-        if (!isResetting) { // 👈 C'est ce IF qui corrige ton bug !
+        if (!isResetting) {
             saveGame();
         }
     });

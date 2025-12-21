@@ -1,18 +1,12 @@
 import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
-// 👇 AJOUTE formatNumber ICI
 import { calculateCost, formatNumber } from './utils.js';
 import { updateUI, addVisualToCanvas, renderVisualCanvas } from './ui.js';
 
-/**
- * NOUVELLE FONCTION : Ajoute de la connaissance proprement
- * Cette fonction peut être utilisée par le clic, mais aussi par des bonus, etc.
- */
+// Ajoute de la connaissance
 export function addKnowledge(amount) {
-    // S'assurer que 'amount' est un nombre positif
     if (typeof amount === 'number') {
         gameState.knowledge += amount;
-        // On affiche un log pour le debug (tu pourras l'enlever plus tard si ça pollue)
         console.log(`Ajouté ${formatNumber(amount)} connaissance(s). Total: ${formatNumber(gameState.knowledge)}`);
         updateUI(); 
     } else {
@@ -21,19 +15,12 @@ export function addKnowledge(amount) {
 }
 window.addKnowledge = addKnowledge;
 
-/**
- * Gestionnaire du Clic Principal
- * C'est lui qui fait le lien entre le BOUTON et ta fonction addKnowledge
- */
+// Clic Principal
 export function handleMainClick() {
     // Le bouton utilise la valeur actuelle du clic définie dans le gameState
     addKnowledge(gameState.clickValue);
-    
-    // (Optionnel) Tu peux ajouter des effets visuels de clic ici plus tard
 }
 
-// ... Le reste de ton fichier (handleBuyUpgrade, navigateToEra, etc.) ne change pas ...
-// COPIE-COLLE TA FONCTION handleBuyUpgrade (celle avec les Shiny) ICI
 export function handleBuyUpgrade(event) {
     const upgradeButton = event.target.closest('.upgrade-button');
     if (!upgradeButton) return; 
@@ -46,7 +33,6 @@ export function handleBuyUpgrade(event) {
         gameState.knowledge -= currentCost;
         upgrade.owned++;
         
-        // --- LOGIQUE SHINY & VALEUR ---
         let valueToAdd = upgrade.value;
         let visualSource = upgrade.icon;
         let isImage = false; 
@@ -101,7 +87,6 @@ export function handleBuyUpgrade(event) {
     }
 }
 
-// ... Les autres fonctions (navigateToEra, gameLoop, saveGame, loadGame) restent identiques ...
 export function navigateToEra(eraId) {
     if (!ERAS[eraId]) return;
     gameState.currentEra = eraId;
@@ -133,10 +118,7 @@ export function handleAdvanceEra() {
 }
 
 export function gameLoop() {
-    // Pour le KPS (automatique), on peut aussi utiliser addKnowledge !
     if (gameState.kps > 0) {
-        // Note: Ici on n'appelle pas addKnowledge pour éviter de spammer la console chaque seconde
-        // Mais on pourrait le faire si on enlève le console.log
         gameState.knowledge += gameState.kps;
         updateUI();
     }
