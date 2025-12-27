@@ -1,5 +1,5 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register } from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login } from './game.js';
 
 window.gameBridge = {
     buyUpgrade: (id) => {
@@ -50,10 +50,10 @@ function initializeGame() {
 
     
     const btnRegister = document.getElementById('register-button');
-    if (btnRegister) {
-        
-        btnRegister.addEventListener('click', register);
-    }
+    if (btnRegister) btnRegister.addEventListener('click', register);
+
+    const btnLogin = document.getElementById('login-button');
+    if (btnLogin) btnLogin.addEventListener('click', login);
 
     
     if (document.getElementById('game-container') || document.getElementById('main-click-button')) {

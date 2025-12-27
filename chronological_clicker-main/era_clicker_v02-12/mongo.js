@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://Flowarin:sagisagi@clustertesthtml.v5zecsu.mongod
 const saveSchema = new mongoose.Schema({
 
     playerName: String,
+    playerPassword: String,
     knowledge: Number,
     kps: Number,
     clickValue : Number,

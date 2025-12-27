@@ -141,6 +141,7 @@ export async function saveGame() {
 
     const dataToSend = {
         playerName: "Florian",
+        playerPassword: "1410fc11f032dd22f0d329e34f8db32e",
         knowledge: gameState.knowledge,
         kps: gameState.kps,
         clickValue: gameState.clickValue
@@ -198,7 +199,7 @@ export async function loadGame() {
     }
 }
 
-export function register() {
+export async function register() {
 
     
     const inputFieldPseudo = document.getElementById('newUser');
@@ -206,11 +207,67 @@ export function register() {
     const pseudo = inputFieldPseudo.value.trim();
     const password = inputFieldPassword.value.trim();
     const hashPassword = md5(password);
+
+
+        
+    const response = await fetch(`http://localhost:8080/api/load/${pseudo}`);
+
+    if (response.ok) {
+   
+        alert(`Ce nom d'utilisateur est déjà pris`);
+
+    } else if (response.status == 404){
+
+        gameState.playerName = pseudo;
+        gameState.playerPassword = hashPassword;
+
+        console.log("Compte créé");
+    }
+
+
+
     
 
-    gameState.playerName = pseudo;
-    gameState.playerPassword = hashPassword;
+}
 
-    console.log("Compte créé");
+export async function login() {
+
+    const inputFieldPseudo = document.getElementById('user');
+    const inputFieldPassword = document.getElementById('pass');
+    const pseudo = inputFieldPseudo.value.trim();
+    const password = inputFieldPassword.value.trim();
+    const hashPassword = md5(password);
+
+    try {
+        
+        const response = await fetch(`http://localhost:8080/api/load/${pseudo}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            if (data.playerPassword == hashPassword) {
+                
+                
+
+                if (data.knowledge !== undefined) gameState.knowledge = data.knowledge;
+                if (data.kps !== undefined) gameState.kps = data.kps;
+                if (data.clickValue !== undefined) gameState.clickValue = data.clickValue;
+
+
+                alert(`Bon retour parmi nous, ${pseudo} !`);
+            }
+            else {
+                alert("Mauvais mot de passe")
+            }
+
+        } else {
+            alert("Aucune sauvegarde trouvée pour ce pseudo.");
+        }
+
+    } catch (err) {
+        console.error("Erreur de connexion :", err);
+        alert("Impossible de contacter le serveur.");
+    }
 
 }
