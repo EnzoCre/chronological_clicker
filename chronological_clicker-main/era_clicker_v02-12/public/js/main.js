@@ -1,5 +1,5 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame } from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register } from './game.js';
 
 window.gameBridge = {
     buyUpgrade: (id) => {
@@ -16,20 +16,30 @@ window.gameBridge = {
 let isResetting = false;
 
 function initializeGame() {
-    // Écouteurs d'événements
-    document.getElementById('main-click-button').addEventListener('click', handleMainClick);
-    document.getElementById('advance-era-button').addEventListener('click', handleAdvanceEra);
-    document.getElementById('prev-era-button').addEventListener('click', handlePrevEra);
-    document.getElementById('next-era-button').addEventListener('click', handleNextEra);
-    document.getElementById('save-button').addEventListener('click', saveGame);
-    document.getElementById('load-button').addEventListener('click', loadGame);
     
+    //J'ai modifié la fonction pour lancer les listeners que si on les trouve sur la page, sinon ça fait planter le programme avec les différentes pages
+    const btnMainClick = document.getElementById('main-click-button');
+    if (btnMainClick) btnMainClick.addEventListener('click', handleMainClick);
 
-    // BOUTON RESET
-    const resetButton = document.getElementById('reset-game-button');
-    if (resetButton) {
-        resetButton.addEventListener('click', () => {
-            const confirmReset = confirm("Es-tu sûr de vouloir TOUT effacer et recommencer à zéro ?");
+    const btnAdvance = document.getElementById('advance-era-button');
+    if (btnAdvance) btnAdvance.addEventListener('click', handleAdvanceEra);
+
+    const btnPrev = document.getElementById('prev-era-button');
+    if (btnPrev) btnPrev.addEventListener('click', handlePrevEra);
+
+    const btnNext = document.getElementById('next-era-button');
+    if (btnNext) btnNext.addEventListener('click', handleNextEra);
+
+    const btnSave = document.getElementById('save-button');
+    if (btnSave) btnSave.addEventListener('click', saveGame);
+
+    const btnLoad = document.getElementById('load-button');
+    if (btnLoad) btnLoad.addEventListener('click', loadGame);
+
+    const btnReset = document.getElementById('reset-game-button');
+    if (btnReset) {
+        btnReset.addEventListener('click', () => {
+            const confirmReset = confirm("Es-tu sûr de vouloir TOUT effacer ?");
             if (confirmReset) {
                 isResetting = true; 
                 localStorage.removeItem('eraClickerSave_v1');
@@ -38,25 +48,21 @@ function initializeGame() {
         });
     }
 
-    // loadGame();
-    updateUI();
-    renderVisualCanvas();
+    
+    const btnRegister = document.getElementById('register-button');
+    if (btnRegister) {
+        
+        btnRegister.addEventListener('click', register);
+    }
 
-    setInterval(gameLoop, 1000);
+    
+    if (document.getElementById('game-container') || document.getElementById('main-click-button')) {
+        updateUI();
+        renderVisualCanvas();
+        setInterval(gameLoop, 1000);
+    }
 
-    // Sauvegarde auto périodique (toutes les 10s)
-    // setInterval(() => { 
-    //     if (!isResetting) { // On ne sauvegarde que si on n'est pas en train de reset
-    //         saveGame();
-    //     }
-    // }, 10000);
-
-    // // Sauvegarde en quittant la page
-    // window.addEventListener('beforeunload', () => { 
-    //     if (!isResetting) {
-    //         saveGame();
-    //     }
-    // });
+    
 }
 
 document.addEventListener('DOMContentLoaded', initializeGame);

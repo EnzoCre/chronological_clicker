@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.post('/save', async (req, res) => {
+app.post('/api/save', async (req, res) => {
     try { 
         const nouvelleSave = new collection(req.body);
         await nouvelleSave.save();

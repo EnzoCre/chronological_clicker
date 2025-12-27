@@ -1,4 +1,6 @@
 export let gameState = {
+    playerName: null,
+    playerPassword: null,
     knowledge: 0,
     kps: 0,
     clickValue: 1,

@@ -2,6 +2,7 @@ import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
 import { calculateCost, formatNumber } from './utils.js';
 import { updateUI, addVisualToCanvas, renderVisualCanvas } from './ui.js';
+import md5 from 'https://esm.sh/md5';
 
 // Ajoute de la connaissance
 export function addKnowledge(amount) {
@@ -13,7 +14,19 @@ export function addKnowledge(amount) {
         console.warn("Erreur : addKnowledge a reçu une valeur invalide", amount);
     }
 }
+
+export function showInfos() {
+    console.log("playerName = ",gameState.playerName);
+    console.log("playerPassword = ",gameState.playerPassword);
+    console.log("Knowledge = ",gameState.knowledge);
+    console.log("kps = ",gameState.kps);
+    console.log("clickValue = ",gameState.clickValue);
+}
+
 window.addKnowledge = addKnowledge;
+window.showInfos = showInfos;
+
+
 
 // Clic Principal
 export function handleMainClick() {
@@ -125,6 +138,7 @@ export function gameLoop() {
 }
 
 export async function saveGame() {
+
     const dataToSend = {
         playerName: "Florian",
         knowledge: gameState.knowledge,
@@ -133,7 +147,7 @@ export async function saveGame() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/save', {
+        const response = await fetch('http://localhost:8080/api/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -182,4 +196,21 @@ export async function loadGame() {
         console.error("Erreur de connexion :", err);
         alert("Impossible de contacter le serveur.");
     }
+}
+
+export function register() {
+
+    
+    const inputFieldPseudo = document.getElementById('newUser');
+    const inputFieldPassword = document.getElementById('newPass');
+    const pseudo = inputFieldPseudo.value.trim();
+    const password = inputFieldPassword.value.trim();
+    const hashPassword = md5(password);
+    
+
+    gameState.playerName = pseudo;
+    gameState.playerPassword = hashPassword;
+
+    console.log("Compte créé");
+
 }
