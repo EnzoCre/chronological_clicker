@@ -169,7 +169,7 @@ export async function saveGame() {
 async function updateDatabase(playerName,dataToSend)
 {
     try{
-        const url = `http://localhost:8080/api/save/${playerName}`;
+        const url = `http://localhost:8080/api/update/${playerName}`;
 
         const response = await fetch(url, {
                 method: "POST", 
@@ -314,5 +314,32 @@ export async function login() {
         alert("Impossible de contacter le serveur.");
     }
 
+}
+
+
+export async function printLeaderboard() {
+    const listElement = document.getElementById('leaderboard-list');
+    
+    try {
+        const response = await fetch('http://localhost:8080/api/leaderboard');
+        
+        if (response.ok) {
+            const topPlayers = await response.json();
+            
+            listElement.innerHTML = '';
+            
+            topPlayers.forEach((player, index) => {
+                const li = document.createElement('li');
+
+                li.innerHTML = `${player.playerName} : ${player.knowledge} connaissances`;
+                
+                listElement.appendChild(li);
+            });
+
+        }
+    } catch (err) {
+        console.error("Impossible de charger le leaderboard", err);
+        listElement.innerHTML = '<li>Erreur de connexion</li>';
+    }
 }
 

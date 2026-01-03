@@ -387,3 +387,30 @@ img.visual-upgrade-icon.visual-image {
         right: 0;
     }
 }
+
+.leaderboard-nav-button {
+    position: absolute;
+    top: 15px;
+    right: 250px;
+    z-index: 1000; /* Pour être sûr qu'il soit au-dessus de tout */
+    
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.leaderboard-nav-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}

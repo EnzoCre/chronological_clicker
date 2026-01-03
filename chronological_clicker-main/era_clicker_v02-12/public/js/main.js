@@ -1,5 +1,5 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login } from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login, printLeaderboard } from './game.js';
 
 window.gameBridge = {
     buyUpgrade: (id) => {
@@ -60,6 +60,12 @@ function initializeGame() {
         updateUI();
         renderVisualCanvas();
         setInterval(gameLoop, 1000);
+    }
+
+    if (document.querySelector('.leaderboard-container')) {
+        
+        console.log("Oui marche bien");
+        printLeaderboard();
     }
 
     

@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.post('/api/create', async (req, res) => {
+app.post("/api/create", async (req, res) => {
     try { 
         const nouvelleSave = new collection(req.body); 
         await nouvelleSave.save();
@@ -21,7 +21,7 @@ app.post('/api/create', async (req, res) => {
     }
 });
 
-app.get('/api/load/:pseudo', async (req, res) => {
+app.get("/api/load/:pseudo", async (req, res) => {
     try {
         const pseudoCherche = req.params.pseudo;
 
@@ -39,7 +39,7 @@ app.get('/api/load/:pseudo', async (req, res) => {
     }
 });
 
-app.post('/api/save/:pseudo', async (req, res) => {
+app.post("/api/update/:pseudo", async (req, res) => {
     try {
         const pseudo = req.params.pseudo; 
         const stats = req.body;              
@@ -57,6 +57,17 @@ app.post('/api/save/:pseudo', async (req, res) => {
 
     } catch (error) {
         console.error("Erreur save:", error);
+        res.status(500).end();
+    }
+});
+
+app.get("/api/leaderboard",async (req,res) => {
+    try {
+        let leaderboardPlayers = await collection.find().sort({ knowledge : -1}).limit(10);
+
+        res.status(200).json(leaderboardPlayers);
+    } catch (error) {
+        console.error("Erreur leaderboard:", error);
         res.status(500).end();
     }
 });
