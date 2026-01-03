@@ -23,7 +23,7 @@ h2 {
   font-weight: 600;
 }
 
-/* champs d'entrée identiques */
+
 input {
   width: 100%;
   padding: 12px;
@@ -35,26 +35,32 @@ input {
   font-size: 16px;
 }
 
-/* Bouton création — seule différence de couleur */
+#leaderboard-list li {
+    display: flex;              
+    justify-content: space-between; 
+    align-items: center;        
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
 button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  margin-top: 10px;
-  font-size: 18px;
-  border-radius: 12px;
+  margin-top: 0; 
+  padding: 10px 20px;
+  background-color: #2563eb; 
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s ease;
-  background: #cc5a2f;       /* ocre (création) */
-  color: #000;
   font-weight: 600;
+  transition: background-color 0.2s;
+  width: auto; 
 }
 
 button:hover {
-  background: #b44f29;
+  background: #2988b4;
 }
 
-/* lien identique */
+
 a {
   display: block;
   margin-top: 16px;
@@ -67,3 +73,7 @@ a {
 a:hover {
   color: #b5dcff;
 }
+
+
+
+

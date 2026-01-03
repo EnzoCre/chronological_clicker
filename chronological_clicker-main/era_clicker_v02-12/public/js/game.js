@@ -324,22 +324,95 @@ export async function printLeaderboard() {
         const response = await fetch('http://localhost:8080/api/leaderboard');
         
         if (response.ok) {
-            const topPlayers = await response.json();
+            const leaderboardPlayers = await response.json();
             
             listElement.innerHTML = '';
             
-            topPlayers.forEach((player, index) => {
+            leaderboardPlayers.forEach((player, index) => {
                 const li = document.createElement('li');
 
-                li.innerHTML = `${player.playerName} : ${player.knowledge} connaissances`;
+                li.innerText = `${player.playerName} : ${player.knowledge} connaissances`;
+
+                const attackButton = document.createElement("button");
+                attackButton.innerText = "Attaquer (1000 connaissances)";
+
+                attackButton.addEventListener('click', () => {
+                    sendAttack(player.playerName);
+                });
+
+                li.appendChild(attackButton);
                 
                 listElement.appendChild(li);
+                
+            
             });
 
         }
     } catch (err) {
         console.error("Impossible de charger le leaderboard", err);
-        listElement.innerHTML = '<li>Erreur de connexion</li>';
     }
 }
+
+export async function sendAttack(target) {
+    const x = Math.floor(Math.random()*100);
+    console.log(x);
+
+    if (x>=0 && x<=49) {
+
+    let newKnowledge;
+    
+        if (gameState.knowledge >= 2000) {
+            newKnowledge = gameState.knowledge - 2000;
+        }else if (gameState.knowledge < 2000){
+            newKnowledge = 0;
+        }
+
+        const dataToSend = {
+            knowledge: newKnowledge,
+            kps: gameState.kps,
+            clickValue: gameState.clickValue
+            };
+
+        const result = await updateDatabase(gameState.playerName,dataToSend);
+
+        if (result.ok)
+            {
+                alert("Oups! Vous avez perdu 2000 conaissances");
+                printLeaderboard();
+            }
+
+    }
+
+    if (x>=50 && x<=99) {
+
+        const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                
+                if (response.ok) {
+                    const targetData = await response.json(); 
+
+                    
+                    let newKnowledge;
+                    if (targetData.knowledge >= 2000) {
+                        newKnowledge = targetData.knowledge - 2000;
+                    } else {
+                        newKnowledge = 0;
+                    }
+
+                    const dataToSend = {
+                        knowledge: newKnowledge,
+                        kps: targetData.kps,         
+                        clickValue: targetData.clickValue
+                    };
+
+                    const result = await updateDatabase(target, dataToSend);
+
+                    if (result.ok){
+                        alert(`Vous avez enlevé 2000 de connaissance à ${targetData.playerName}`);
+                        printLeaderboard();
+                    }
+
+        }
+    }
+}
+
 
