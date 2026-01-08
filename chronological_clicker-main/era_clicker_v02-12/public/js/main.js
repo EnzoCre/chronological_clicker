@@ -1,5 +1,5 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login, printLeaderboard } from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login, printLeaderboard, loadFromSessionStorage , saveToSessionStorage } from './game.js';
 
 window.gameBridge = {
     buyUpgrade: (id) => {
@@ -55,6 +55,8 @@ function initializeGame() {
     const btnLogin = document.getElementById('login-button');
     if (btnLogin) btnLogin.addEventListener('click', login);
 
+    loadFromSessionStorage();
+
     
     if (document.getElementById('game-container') || document.getElementById('main-click-button')) {
         updateUI();
@@ -67,6 +69,12 @@ function initializeGame() {
         console.log("Oui marche bien");
         printLeaderboard();
     }
+
+    setInterval(saveToSessionStorage, 30000);
+
+    window.addEventListener('beforeunload', () => {
+        saveToSessionStorage(true);
+    });
 
     
 }
