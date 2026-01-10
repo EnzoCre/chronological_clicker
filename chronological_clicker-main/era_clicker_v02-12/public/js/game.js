@@ -8,7 +8,6 @@ import md5 from 'https://esm.sh/md5';
 export function addKnowledge(amount) {
     if (typeof amount === 'number') {
         gameState.knowledge += amount;
-        console.log(`Ajouté ${formatNumber(amount)} connaissance(s). Total: ${formatNumber(gameState.knowledge)}`);
         updateUI(); 
     } else {
         console.warn("Erreur : addKnowledge a reçu une valeur invalide", amount);
@@ -27,7 +26,6 @@ export function setPlayerName(playerName) {
     gameState.playerName = playerName;
 }
 
-window.addKnowledge = addKnowledge;
 window.showInfos = showInfos;
 window.setPlayerName = setPlayerName;
 
@@ -273,6 +271,9 @@ export async function register() {
 
         gameState.playerName = pseudo;
         gameState.playerPassword = hashPassword;
+        gameState.knowledge = 0;
+        gameState.kps = 0;
+        gameState.clickValue = 1;
 
         const dataToSend = {
         playerName: pseudo,
@@ -353,6 +354,8 @@ export async function login() {
 
 
 export async function printLeaderboard() {
+    const attackInput = document.getElementById("attack-input")
+    const attackValue = attackInput.value.trim()
     const listElement = document.getElementById('leaderboard-list');
     
     try {
@@ -361,18 +364,27 @@ export async function printLeaderboard() {
         if (response.ok) {
             const leaderboardPlayers = await response.json();
             
-            listElement.innerHTML = '';
-            
+            listElement.innerHTML = '';     
+
             leaderboardPlayers.forEach((player, index) => {
                 const li = document.createElement('li');
 
                 li.innerText = `${player.playerName} : ${player.knowledge} connaissances`;
 
                 const attackButton = document.createElement("button");
-                attackButton.innerText = "Attaquer (1000 connaissances)";
+
+                console.log(!isNaN(attackValue));
+
+                if (!isNaN(attackValue) && attackValue != "" && attackValue > 0) {
+                    attackButton.innerText = `Attaquer (${attackValue} connaissances)`;
+                }else {
+                    attackButton.innerText = "Attaquer";
+                }
+
+                
 
                 attackButton.addEventListener('click', () => {
-                    sendAttack(player.playerName);
+                    sendAttack(player.playerName,attackValue);
                 });
 
                 li.appendChild(attackButton);
@@ -388,177 +400,199 @@ export async function printLeaderboard() {
     }
 }
 
-export async function sendAttack(target) {
+export async function sendAttack(target, attackValue) {
     
     if(gameState.playerName == null) {
         alert("Il faut être connecté pour pouvoir attaquer")
     }else{
 
-        const x = Math.floor(Math.random()*100);
-        console.log(x);
+        if (!isNaN(attackValue) && attackValue != "" && attackValue > 0) {
 
-        if (x >= 0 && x <= 9) { //L'attaquant perd 2000 connaissances (Pire scénario pour lui (10%))
+            const x = Math.floor(Math.random()*100);
+            console.log(x);
 
-            const response = await fetch(`http://localhost:8080/api/load/${gameState.playerName}`);
-                    
-                    if (response.ok) {
-                        const targetData = await response.json(); 
-    
-                        
-                        let newKnowledge;
-                        if (targetData.knowledge >= 2000) {
-                            newKnowledge = targetData.knowledge - 2000;
-                        } else {
-                            newKnowledge = 0;
-                        }
-    
-                        const dataToSend = {
-                            knowledge: newKnowledge,
-                            kps: targetData.kps,         
-                            clickValue: targetData.clickValue
-                        };
-    
-                        const result = await updateDatabase(gameState.playerName, dataToSend);
-    
-                        if (result.ok){
-                            alert(`Vous avez perdu 2000 de connaisssance !!!`);
-                            printLeaderboard();
-                        }
-    
+            if(attackValue > gameState.knowledge) {
+                alert("Pas assez de connaissance pour attaquer")
+            }else {
+
+                if (x == 0) { //L'attaquant perd toutes ses connaissances (Pire scénario pour lui (1%))
+
+                    const response = await fetch(`http://localhost:8080/api/load/${gameState.playerName}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+            
+            
+                                const dataToSend = {
+                                    knowledge: 0,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(gameState.playerName, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez tout perdu !!!`);
+                                    printLeaderboard();
+                                }
+            
+                    }
+                }
+
+                if (x >= 1 && x <= 10) { //L'attaquant perd 2x sa mise (10%)
+
+                    const response = await fetch(`http://localhost:8080/api/load/${gameState.playerName}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+            
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= 2*attackValue) {
+                                    newKnowledge = targetData.knowledge - 2*attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(gameState.playerName, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez perdu ${2*attackValue} de connaisssance !!!`);
+                                    printLeaderboard();
+                                }
+            
+                    }
+                }
+            
+                if (x >= 11 && x <= 30) { //L'attaquant ne perd rien (Pas fou puisqu'il a dépensé de la connaissance (15%))
+                    alert("L'attaque a échoué, la cible s'en sort indemne")
+                }
+            
+                if (x >= 31 && x <= 50) { //La cible perd 1000 connaissances (Bof(20%))
+            
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+            
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= attackValue) {
+                                    newKnowledge = targetData.knowledge - attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(target, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez enlevé ${attackValue} de connaissance à ${targetData.playerName}`);
+                                    printLeaderboard();
+                                }
+            
+                    }
+                }
+            
+                if (x >= 51 && x <= 95) { //La cible perd 2000 connaissances (Très bien(20%))
+            
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+            
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= 2*attackValue) {
+                                    newKnowledge = targetData.knowledge - 2*attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(target, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez enlevé ${2*attackValue} de connaissance à ${targetData.playerName}`);
+                                    printLeaderboard();
+                                }
+            
+                    }
+                }
+            
+                if (x >= 96 && x <= 99) { //Jackpot (10%)
+            
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+            
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= 10*attackValue) {
+                                    newKnowledge = targetData.knowledge - 10*attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(target, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Jackpot !!! Vous avez enlevé ${10*attackValue} de connaissance à ${targetData.playerName}`);
+                                    printLeaderboard();
+                                }
+            
+                    }
+                }
             }
-        }
-    
-        if (x >= 10 && x <= 24) { //L'attaquant ne perd rien (Pas fou puisqu'il a dépensé de la connaissance (15%))
-            alert("L'attaque a échoué, la cible s'en sort indemne")
-        }
-    
-        if (x >= 25 && x <= 39) { //La cible perd 500 connaissances (Toujours pas fou car pas rentable(15%))
-    
-            const response = await fetch(`http://localhost:8080/api/load/${target}`);
-                    
-                    if (response.ok) {
-                        const targetData = await response.json(); 
-    
-                        
-                        let newKnowledge;
-                        if (targetData.knowledge >= 500) {
-                            newKnowledge = targetData.knowledge - 500;
-                        } else {
-                            newKnowledge = 0;
-                        }
-    
-                        const dataToSend = {
-                            knowledge: newKnowledge,
-                            kps: targetData.kps,         
-                            clickValue: targetData.clickValue
-                        };
-    
-                        const result = await updateDatabase(target, dataToSend);
-    
-                        if (result.ok){
-                            alert(`Vous avez enlevé 500 de connaissance à ${targetData.playerName}`);
-                            printLeaderboard();
-                        }
-    
-            }
-        }
-    
-        if (x >= 40 && x <= 59) { //La cible perd 1000 connaissances (Bof(20%))
-    
-            const response = await fetch(`http://localhost:8080/api/load/${target}`);
-                    
-                    if (response.ok) {
-                        const targetData = await response.json(); 
-    
-                        
-                        let newKnowledge;
-                        if (targetData.knowledge >= 1000) {
-                            newKnowledge = targetData.knowledge - 1000;
-                        } else {
-                            newKnowledge = 0;
-                        }
-    
-                        const dataToSend = {
-                            knowledge: newKnowledge,
-                            kps: targetData.kps,         
-                            clickValue: targetData.clickValue
-                        };
-    
-                        const result = await updateDatabase(target, dataToSend);
-    
-                        if (result.ok){
-                            alert(`Vous avez enlevé 1000 de connaissance à ${targetData.playerName}`);
-                            printLeaderboard();
-                        }
-    
-            }
-        }
-    
-        if (x >= 60 && x <= 89) { //La cible perd 2000 connaissances (Très bien(20%))
-    
-            const response = await fetch(`http://localhost:8080/api/load/${target}`);
-                    
-                    if (response.ok) {
-                        const targetData = await response.json(); 
-    
-                        
-                        let newKnowledge;
-                        if (targetData.knowledge >= 2000) {
-                            newKnowledge = targetData.knowledge - 2000;
-                        } else {
-                            newKnowledge = 0;
-                        }
-    
-                        const dataToSend = {
-                            knowledge: newKnowledge,
-                            kps: targetData.kps,         
-                            clickValue: targetData.clickValue
-                        };
-    
-                        const result = await updateDatabase(target, dataToSend);
-    
-                        if (result.ok){
-                            alert(`Vous avez enlevé 2000 de connaissance à ${targetData.playerName}`);
-                            printLeaderboard();
-                        }
-    
-            }
-        }
-    
-        if (x >= 90 && x <= 99) { //Jackpot (10%)
-    
-            const response = await fetch(`http://localhost:8080/api/load/${target}`);
-                    
-                    if (response.ok) {
-                        const targetData = await response.json(); 
-    
-                        
-                        let newKnowledge;
-                        if (targetData.knowledge >= 10000) {
-                            newKnowledge = targetData.knowledge - 10000;
-                        } else {
-                            newKnowledge = 0;
-                        }
-    
-                        const dataToSend = {
-                            knowledge: newKnowledge,
-                            kps: targetData.kps,         
-                            clickValue: targetData.clickValue
-                        };
-    
-                        const result = await updateDatabase(target, dataToSend);
-    
-                        if (result.ok){
-                            alert(`Jackpot !!! Vous avez enlevé 10000 de connaissance à ${targetData.playerName}`);
-                            printLeaderboard();
-                        }
-    
-            }
-        }
+        } else {alert("Veuillez entrer un nombre valide pour l'attaque")}
 
     }
+
+    saveToSessionStorage();
 
     
 }
 
+
+export function resetGame() {
+    
+    gameState.knowledge = 0;
+    gameState.kps = 0;
+    gameState.clickValue = 1;
+
+    saveToSessionStorage();
+
+    const dataToSend = {
+        knowledge: gameState.knowledge,
+        kps: gameState.kps,
+        clickValue: gameState.clickValue
+    };
+
+    updateDatabase(gameState.playerName,dataToSend);
+
+
+}
 

@@ -1,5 +1,6 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login, printLeaderboard, loadFromSessionStorage , saveToSessionStorage } from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, loadGame, register, login, printLeaderboard, loadFromSessionStorage , saveToSessionStorage, resetGame } from './game.js';
+import {gameState} from './state.js';
 
 window.gameBridge = {
     buyUpgrade: (id) => {
@@ -44,6 +45,7 @@ function initializeGame() {
                 isResetting = true; 
                 localStorage.removeItem('eraClickerSave_v1');
                 location.reload();
+                resetGame();
             }
         });
     }
@@ -54,6 +56,9 @@ function initializeGame() {
 
     const btnLogin = document.getElementById('login-button');
     if (btnLogin) btnLogin.addEventListener('click', login);
+
+    const attackText = document.getElementById('attack-input');
+    if (attackText) attackText.addEventListener('input', printLeaderboard);
 
     loadFromSessionStorage();
 
@@ -74,6 +79,9 @@ function initializeGame() {
 
     window.addEventListener('beforeunload', () => {
         saveToSessionStorage(true);
+        if (gameState.playerName != null) {
+            saveGame();
+        }
     });
 
     

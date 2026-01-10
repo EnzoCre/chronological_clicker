@@ -19,6 +19,8 @@ const saveSchema = new mongoose.Schema({
     clickValue : Number,
 })
 
+
+
 const collection = new mongoose.model("testSave",saveSchema)
 
 module.exports=collection
