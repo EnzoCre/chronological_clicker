@@ -2,7 +2,7 @@ const express = require('express');
  const cors = require('cors');
 
 const app = express();
-const collection = require('./mongo')
+const { collection, collectionMessage } = require('./mongo');
 
 app.use(cors());
 app.use(express.json());
@@ -72,6 +72,17 @@ app.get("/api/leaderboard",async (req,res) => {
     }
 });
 
+app.post("/api/sendMessage", async(req, res) => {
+    try {
+        const nouvelleAttaque = new collectionMessage(req.body);
+        await nouvelleAttaque.save();
+
+        res.status(200).end();
+    } catch(error) {
+        console.error(error);
+        res.status(500).end();
+    }
+});
 
 app.listen(8080, () => {
 

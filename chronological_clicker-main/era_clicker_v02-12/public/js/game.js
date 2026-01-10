@@ -354,8 +354,10 @@ export async function login() {
 
 
 export async function printLeaderboard() {
-    const attackInput = document.getElementById("attack-input")
-    const attackValue = attackInput.value.trim()
+    const attackInput = document.getElementById("attack-input");
+    const attackValue = attackInput.value.trim();
+    const messageInput = document.getElementById("message-input");
+    const messageText = messageInput.value.trim();
     const listElement = document.getElementById('leaderboard-list');
     
     try {
@@ -384,7 +386,7 @@ export async function printLeaderboard() {
                 
 
                 attackButton.addEventListener('click', () => {
-                    sendAttack(player.playerName,attackValue);
+                    sendAttack(player.playerName,attackValue,messageText);
                 });
 
                 li.appendChild(attackButton);
@@ -400,7 +402,7 @@ export async function printLeaderboard() {
     }
 }
 
-export async function sendAttack(target, attackValue) {
+export async function sendAttack(target, attackValue, messageText) {
     
     if(gameState.playerName == null) {
         alert("Il faut être connecté pour pouvoir attaquer")
@@ -529,8 +531,33 @@ export async function sendAttack(target, attackValue) {
                                 const result = await updateDatabase(target, dataToSend);
             
                                 if (result.ok){
-                                    alert(`Vous avez enlevé ${2*attackValue} de connaissance à ${targetData.playerName}`);
+                                    //alert(`Vous avez enlevé ${2*attackValue} de connaissance à ${targetData.playerName}`);
                                     printLeaderboard();
+
+                                    const messageData = {
+                                        senderName: gameState.playerName,
+                                        targetName: targetData.playerName,
+                                        message: messageText,
+                                        attackValue: attackValue,
+                                    }
+
+                                    try {
+                                        const responseMessage = await fetch("http://localhost:8080/api/sendMessage", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify(messageData)
+                                        });
+                                        if (responseMessage.ok) {
+                                            alert("Attaque envoyée");
+                                        } else {
+                                            console.error("Erreur serveur...");
+                                        }
+                                    } catch (err) {
+                                        console.error("Impossible de contacter le serveur", err);
+                                    }
+                                    
                                 }
             
                     }

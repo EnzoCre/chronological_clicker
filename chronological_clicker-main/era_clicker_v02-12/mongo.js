@@ -19,8 +19,19 @@ const saveSchema = new mongoose.Schema({
     clickValue : Number,
 })
 
+const messageSchema = new mongoose.Schema({
+
+    senderName: String,
+    targetName: String,
+    message: String,
+    attackValue: Number,
+
+})
+
+const collection = new mongoose.model("testSave",saveSchema);
+
+const collectionMessage = new mongoose.model("AttackMessage", messageSchema);
+
+module.exports = { collection, collectionMessage };
 
 
-const collection = new mongoose.model("testSave",saveSchema)
-
-module.exports=collection
