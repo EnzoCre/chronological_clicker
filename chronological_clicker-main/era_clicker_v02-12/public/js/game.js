@@ -89,6 +89,42 @@ export function handleBuyUpgrade(event) {
             }
         }
 
+        if (upgradeId === 'parchment') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PARCHEMIN SHINY DÉCOUVERT !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_medieval/parchemin_shiny.png';
+            } else {
+                visualSource = 'images/era_medieval/parchemin.png';
+            }
+        }
+
+        if (upgradeId === 'monastery') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("EGLISE SHINY DÉCOUVERT !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_medieval/eglise_shiny.png';
+            } else {
+                visualSource = 'images/era_medieval/eglise.png';
+            }
+        }
+
+        if (upgradeId === 'bread') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PAIN SHINY DÉCOUVERT !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_medieval/pain_shiny.png';
+            } else {
+                visualSource = 'images/era_medieval/pain.png';
+            }
+        }
+
         if (upgrade.type === 'click') {
             gameState.clickValue += valueToAdd;
         } else if (upgrade.type === 'auto') {

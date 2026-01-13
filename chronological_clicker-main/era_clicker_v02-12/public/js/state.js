@@ -8,13 +8,13 @@ export let gameState = {
     maxEraReached: 'stone_age',
     visualState: {
         'stone_age': [],
-        'bronze_age': [],
-        'iron_age': [],
+        'medieval_age': [], // Plus de bronze ni de fer ici
+        'modern_age': [],
     }
 };
 
-// Améliorations
 export let upgrades = {
+    // --- ÂGE DE PIERRE ---
     'sharp_stone': {
         name: 'Pierre taillée', description: '+1 Connaissance par clic',
         baseCost: 10, costMultiplier: 1.15, type: 'click', value: 1,
@@ -30,24 +30,37 @@ export let upgrades = {
         baseCost: 25, costMultiplier: 1.20, type: 'auto', value: 1,
         owned: 0, requiredEra: 'stone_age', icon: '🧑‍🌾'
     },
-    'bronze_pickaxe': {
-        name: 'Pioche en bronze', description: '+10 Connaissance par clic',
-        baseCost: 120, costMultiplier: 1.15, type: 'click', value: 10,
-        owned: 0, requiredEra: 'bronze_age', icon: '⛏️'
+
+    // --- MOYEN ÂGE ---
+    'parchment': {
+        name: 'Parchemin', description: '+50 Connaissance par clic',
+        baseCost: 250, costMultiplier: 1.5, type: 'click', value: 50,
+        owned: 0, requiredEra: 'medieval_age', icon: '📜'
     },
-    'small_mine': {
-        name: 'Petite mine', description: '+15 Connaissance par seconde',
-        baseCost: 600, costMultiplier: 1.20, type: 'auto', value: 15,
-        owned: 0, requiredEra: 'bronze_age', icon: '⛰️'
+    'monastery': {
+        name: 'Eglise', description: '+100 Connaissance par seconde',
+        baseCost: 100, costMultiplier: 1.3, type: 'auto', value: 100,
+        owned: 0, requiredEra: 'medieval_age', icon: '⛪'
     },
-    'iron_sword': {
-        name: 'Épée en fer', description: '+20 Connaissance par clic',
-        baseCost: 600, costMultiplier: 1.6, type: 'click', value: 20,
-        owned: 0, requiredEra: 'iron_age', icon: '⚔️'
+    'bread': {
+        name: 'Pain', description: '+150 Connaissance par clic',
+        baseCost: 200, costMultiplier: 1.4, type: 'click', value: 150,
+        owned: 0, requiredEra: 'medieval_age', icon: '🥖'
     },
-    'forge': {
-        name: 'Forge', description: '+25 Connaissance par seconde',
-        baseCost: 5000, costMultiplier: 1.4, type: 'auto', value: 25,
-        owned: 0, requiredEra: 'iron_age', icon: '⚒️'
+
+    'oil_barrel': {
+        name: 'Baril de pétrole', description: '+500 Connaissance par clic',
+        baseCost: 500, costMultiplier: 1.5, type: 'click', value: 500,
+        owned: 0, requiredEra: 'modern_age', icon: '🛢️'
+    },
+    'computer': {
+        name: 'Ordinateur', description: '+1000 Connaissance par seconde',
+        baseCost: 200, costMultiplier: 1.3, type: 'auto', value: 1000,
+        owned: 0, requiredEra: 'modern_age', icon: '💻'
+    },
+    'skyscraper': {
+        name: 'Gratte-ciel', description: '+5000 Connaissance par seconde',
+        baseCost: 100, costMultiplier: 1.4, type: 'auto', value: 5000,
+        owned: 0, requiredEra: 'modern_age', icon: '🏙️'
     }
 };

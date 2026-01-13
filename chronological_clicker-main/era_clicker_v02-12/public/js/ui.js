@@ -7,19 +7,18 @@ const knowledgeDisplay = document.getElementById('knowledge-display');
 const kpsDisplay = document.getElementById('kps-display');
 const eraDisplay = document.getElementById('era-display');
 const clickValueDisplay = document.getElementById('click-value-display');
-const mainClickButton = document.getElementById('main-click-button');
-const upgradesContainer = document.getElementById('upgrades-container');
-const advanceEraButton = document.getElementById('advance-era-button');
 const visualCanvas = document.getElementById('visual-canvas');
 const prevEraButton = document.getElementById('prev-era-button'); 
 const nextEraButton = document.getElementById('next-era-button');
+const advanceEraButton = document.getElementById('advance-era-button');
 const saveButton = document.getElementById("save-button");
-const loadButton = document.getElementById("load-button");
 
 export function renderVisualCanvas() {
     visualCanvas.innerHTML = '';
     const eraVisuals = gameState.visualState[gameState.currentEra];
     
+    if (!eraVisuals) return;
+
     eraVisuals.forEach(visual => {
         let element;
 
@@ -27,58 +26,70 @@ export function renderVisualCanvas() {
             element = document.createElement('img');
             element.src = visual.icon; 
             element.className = 'visual-upgrade-icon visual-image';
-        } 
+            
+            // --- AJOUT : Appliquer la taille personnalisée si elle existe ---
+            if (visual.size) {
+                element.style.width = `${visual.size}px`;
+                element.style.height = `${visual.size}px`;
+            }
+            // ---------------------------------------------------------------
+
+        } else {
+            element = document.createElement('div');
+            element.innerText = visual.icon;
+            element.className = 'visual-upgrade-icon';
+            // Pour les émojis, c'est le font-size qu'on change
+            if (visual.size) {
+                element.style.fontSize = `${visual.size / 2}px`; 
+            }
+        }
 
         element.title = visual.name;
         element.style.left = `${visual.x}%`;
         element.style.top = `${visual.y}%`;
-        element.style.transform = `rotate(${visual.rotation}deg)`;
         
         visualCanvas.appendChild(element);
     });
 }
 
-export function addVisualToCanvas(upgrade, visualSource, isImage) {
+export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
     const finalIcon = visualSource || upgrade.icon;
-    const finalIsImage = isImage || false;
-
     if (!finalIcon) return;
 
-    let minX = 10, maxX = 90;
-    let minY = 10, maxY = 90;
-
-    if (gameState.currentEra === 'stone_age') {
-
-        if (upgrade.name === 'Pierre taillée') {
-            minX = 3;  maxX = 30;
-            minY = 15; maxY = 40;
-        } 
-        else if (upgrade.name === 'Mammouth') {
-            minX = 60; maxX = 85;
-            minY = 15; maxY = 50;
+    // Zones définies uniquement pour Pierre et Moyen Âge
+    const zones = {
+        stone_age: { 
+            'Pierre taillée': [3, 30, 15, 40], 
+            'Mammouth': [60, 85, 15, 50], 
+            'Cueilleur': [5, 85, 60, 80], 
+            def: [20, 80, 20, 80]
+        },
+        medieval_age: { 
+            'Parchemin': [3, 30, 15, 40, 60], 
+            'Pain': [60, 85, 15, 30, 40],
+            'Eglise': [15, 75, 60, 80, 150], 
+            def: [10, 90, 20, 80, 90]
+        },
+        modern_age: {
+        // [minX, maxX, minY, maxY, SIZE]
+        'Baril de pétrole': [5, 90, 70, 90, 50],   // En bas, taille moyenne
+        'Ordinateur':       [5, 90, 50, 80, 40],   // Au milieu, petit
+        'Gratte-ciel':      [5, 90, 10, 50, 150],  // En haut (fond), TRÈS grand
+        def:                [10, 90, 20, 80, 60]
         }
-        else if (upgrade.name === 'Cueilleur') {
-            minX = 5;  maxX = 85;
-            minY = 60; maxY = 80;
-        }
-        else {
-            minX = 20; maxX = 80;
-            minY = 20; maxY = 80;
-        }
-    }
+    };
 
-    // Position aléatoire DANS les limites définies
-    const x = Math.random() * (maxX - minX) + minX;
-    const y = Math.random() * (maxY - minY) + minY;
-    
+    const [minX, maxX, minY, maxY, size] = zones[gameState.currentEra]?.[upgrade.name] || zones[gameState.currentEra]?.def || [10, 90, 10, 90, 90];
+
     gameState.visualState[gameState.currentEra].push({
-        icon: finalIcon,
-        name: upgrade.name,
-        x: x,
-        y: y,
-        isImage: finalIsImage
+        icon: finalIcon, 
+        name: upgrade.name, 
+        isImage,
+        x: Math.random() * (maxX - minX) + minX,
+        y: Math.random() * (maxY - minY) + minY,
+        size: size // <--- On sauvegarde la taille ici
     });
-    
+
     renderVisualCanvas();
 }
 
@@ -88,10 +99,15 @@ export function updateUI() {
     clickValueDisplay.innerText = formatNumber(gameState.clickValue);
 
     const currentEraData = ERAS[gameState.currentEra];
+    
+    // Sécurité au cas où currentEraData serait undefined (bug de sauvegarde)
+    if (!currentEraData) {
+        console.error("Erreur critique : L'ère actuelle n'existe pas dans les constantes.", gameState.currentEra);
+        return;
+    }
+
     eraDisplay.innerText = currentEraData.name;
     
-    // On met à jour le texte sous le bouton principal au lieu du bouton lui-même
-    // car le bouton est devenu une image vide
     const actionLabel = document.getElementById('action-label');
     if (actionLabel) {
         actionLabel.innerText = currentEraData.clickerText;
@@ -99,22 +115,23 @@ export function updateUI() {
     
     document.body.className = `era-${gameState.currentEra}`;
 
-    // Bouton avancer
+    // Logique du bouton "Passer à l'ère suivante"
     if (gameState.currentEra === gameState.maxEraReached && currentEraData.nextEra) {
         advanceEraButton.style.display = 'block';
         const cost = currentEraData.nextEraCost;
-        advanceEraButton.innerText = `Passer à l'Ère : ${ERAS[currentEraData.nextEra].name} (${formatNumber(cost)})`;
+        const nextEraName = ERAS[currentEraData.nextEra].name;
+        advanceEraButton.innerText = `Passer à l'Ère : ${nextEraName} (${formatNumber(cost)})`;
         advanceEraButton.disabled = gameState.knowledge < cost;
     } else {
         advanceEraButton.style.display = 'none';
     }
 
-    // Boutons navigation
+    // Boutons de navigation (précédent / suivant)
     prevEraButton.style.display = currentEraData.previousEra ? 'inline-block' : 'none';
     prevEraButton.innerText = `⬅️`;
+    
     nextEraButton.style.display = (currentEraData.nextEra && gameState.currentEra !== gameState.maxEraReached) ? 'inline-block' : 'none';
     nextEraButton.innerText = `➡️`;
-    saveButton.innerText = 'Sauvegarder'
     
     // Appel à React
     if (window.renderReactApp) {

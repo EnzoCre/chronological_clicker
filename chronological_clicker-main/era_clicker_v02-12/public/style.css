@@ -40,15 +40,43 @@ body {
     background-repeat: no-repeat, repeat;
 }
 
-.era-bronze_age {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/era_bronze/era_bronze_age.png');
+.era-medieval_age {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/era_medieval/era_medieval_age.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
-.era-iron_age {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/era_iron_age.png');
+
+/* Style du canvas (Le Territoire) pour le Moyen Âge */
+.era-medieval_age #visual-canvas {
+    background-image: url('images/era_medieval/village_medieval.jpg');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    border: 2px solid rgba(212, 175, 55, 0.5); /* Une petite bordure dorée pour faire classe */
 }
+
+.era-modern_age {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/era_modern/era_modern_age.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Fond du territoire (Canvas) */
+.era-modern_age #visual-canvas {
+    background-image: url('images/era_modern/city_modern.png');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    border: 2px solid rgba(0, 255, 255, 0.5); /* Bordure néon bleu cyan */
+}
+
+/* Bouton Central */
+.era-modern_age #main-click-button {
+    background-image: url('images/era_modern/Bouton_modern.png');
+}
+
 
 
 
