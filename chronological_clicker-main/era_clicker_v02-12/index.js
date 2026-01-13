@@ -95,6 +95,18 @@ app.get("/api/getAttacks/:targetName", async (req,res) => {
     
 })
 
+app.delete("/api/deleteAttacks/:targetName", async (req, res) => {
+    try {
+        const target = req.params.targetName;
+        await collectionMessage.deleteMany({ targetName: target });
+        res.status(200).end();
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).end();
+    }
+});
+
 app.listen(8080, () => {
 
     console.log("Server started on port : 8080");

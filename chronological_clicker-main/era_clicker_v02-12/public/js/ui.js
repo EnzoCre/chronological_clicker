@@ -87,7 +87,7 @@ export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
         isImage,
         x: Math.random() * (maxX - minX) + minX,
         y: Math.random() * (maxY - minY) + minY,
-        size: size // <--- On sauvegarde la taille ici
+        size: size 
     });
 
     renderVisualCanvas();
@@ -100,7 +100,6 @@ export function updateUI() {
 
     const currentEraData = ERAS[gameState.currentEra];
     
-    // Sécurité au cas où currentEraData serait undefined (bug de sauvegarde)
     if (!currentEraData) {
         console.error("Erreur critique : L'ère actuelle n'existe pas dans les constantes.", gameState.currentEra);
         return;
@@ -115,7 +114,6 @@ export function updateUI() {
     
     document.body.className = `era-${gameState.currentEra}`;
 
-    // Logique du bouton "Passer à l'ère suivante"
     if (gameState.currentEra === gameState.maxEraReached && currentEraData.nextEra) {
         advanceEraButton.style.display = 'block';
         const cost = currentEraData.nextEraCost;
@@ -137,4 +135,8 @@ export function updateUI() {
     if (window.renderReactApp) {
         window.renderReactApp(upgrades, gameState.currentEra, gameState.knowledge);
     }
+}
+
+export function updateUIleaderboard() {
+    knowledgeDisplay.innerText = formatNumber(gameState.knowledge);
 }

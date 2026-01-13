@@ -1,5 +1,5 @@
 import { updateUI, renderVisualCanvas } from './ui.js';
-import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, printAttacks, register, login, printLeaderboard, loadFromSessionStorage , saveToSessionStorage, resetGame} from './game.js';
+import { handleMainClick, handleBuyUpgrade, handleAdvanceEra, handlePrevEra, handleNextEra, gameLoop, saveGame, printAttacks, register, login, printLeaderboard, loadFromSessionStorage , saveToSessionStorage, resetGame, WereUserAttacked, gameLoopLeaderboard} from './game.js';
 import {gameState} from './state.js';
 
 window.gameBridge = {
@@ -71,12 +71,14 @@ function initializeGame() {
         if (gameState.playerName != null) {
             loadFromSessionStorage();
         }
+        printAttacks();
     }
 
     if (document.querySelector('.leaderboard-container')) {
         
         console.log("Oui marche bien");
         printLeaderboard();
+        setInterval(gameLoopLeaderboard, 1000);
     }
 
     setInterval(saveToSessionStorage, 30000);

@@ -1,7 +1,7 @@
 import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
 import { calculateCost, formatNumber } from './utils.js';
-import { updateUI, addVisualToCanvas, renderVisualCanvas } from './ui.js';
+import { updateUI, addVisualToCanvas, renderVisualCanvas, updateUIleaderboard } from './ui.js';
 import md5 from 'https://esm.sh/md5';
 
 // Ajoute de la connaissance
@@ -173,6 +173,13 @@ export function gameLoop() {
     if (gameState.kps > 0) {
         gameState.knowledge += gameState.kps;
         updateUI();
+    }
+}
+
+export function gameLoopLeaderboard() {
+    if (gameState.kps > 0) {
+        gameState.knowledge += gameState.kps;
+        updateUIleaderboard();
     }
 }
 
@@ -452,6 +459,7 @@ export async function sendAttack(target, attackValue) {
 
             if(attackValue > gameState.knowledge) {
                 alert("Pas assez de connaissance pour attaquer")
+                return;
             }else {
 
                 if (x == 0) { //L'attaquant perd toutes ses connaissances (Pire scénario pour lui (1%))
@@ -694,7 +702,7 @@ async function createAttackDatabase(senderName,targetName,attackValue) {
 
 }
 
-async function WereUserAttacked(target) {
+export async function WereUserAttacked(target) {
     const response = await fetch(`/api/getAttacks/${target}`);
 
     if (response.ok) {
@@ -707,8 +715,10 @@ async function WereUserAttacked(target) {
 }
 
 export async function printAttacks() {
-    if (WereUserAttacked) {
 
+    if(gameState.playerName == null) {
+        return;
+    }
         const listElement = document.getElementById('attacks-list');
 
         try {
@@ -722,7 +732,7 @@ export async function printAttacks() {
                 console.log("Attaques reçues :", attacks);
 
                 
-                let messageHTML = `<p>Pendant votre absence, vous avez subi <strong>${attacks.length}</strong> assaut(s) !</p>`;
+                let messageHTML = `<p>Pendant votre absence, vous avez subi <strong>${attacks.length}</strong> attaques !</p>`;
                 
                 messageHTML += `<ul style="text-align: left; margin-top: 15px; list-style: none; padding: 0;">`;
                 
@@ -743,7 +753,15 @@ export async function printAttacks() {
         console.error("Erreur récupération attaques", err);
     }
 
-    }
+    await deleteAttacks(gameState.playerName);
+    
+}
+
+async function deleteAttacks(target) {
+    const response = await fetch(`http://localhost:8080/api/deleteAttacks/${target}`, {
+        method: "DELETE"
+    });
+    console.log("Suppression attaques");
 }
 
 
@@ -754,7 +772,7 @@ export function showPopup(htmlContent) {
     const closeBtn = document.getElementById('popup-close');
     const okBtn = document.getElementById('popup-ok-btn');
 
-    titleEl.innerText = "Salut";
+    titleEl.innerText = "Rapport de Combat";
     bodyEl.innerHTML = htmlContent; 
 
     overlay.classList.remove('hidden');
