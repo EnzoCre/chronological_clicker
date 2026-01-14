@@ -1,5 +1,3 @@
-// js/ReactUpgrades.js
-
 function UpgradeItem({ id, upgrade, money, onBuy }) {
     const currentCost = Math.ceil(upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.owned));
     const canBuy = money >= currentCost;
@@ -48,7 +46,6 @@ function UpgradeList({ upgradesData, currentEra, money }) {
     );
 }
 
-// On s'assure que l'élément existe
 const rootElement = document.getElementById('upgrades-container');
 let root = null;
 

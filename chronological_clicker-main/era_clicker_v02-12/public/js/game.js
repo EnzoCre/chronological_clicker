@@ -4,7 +4,6 @@ import { calculateCost, formatNumber } from './utils.js';
 import { updateUI, addVisualToCanvas, renderVisualCanvas, updateUIleaderboard } from './ui.js';
 import md5 from 'https://esm.sh/md5';
 
-// Ajoute de la connaissance
 export function addKnowledge(amount) {
     if (typeof amount === 'number') {
         gameState.knowledge += amount;
@@ -29,11 +28,7 @@ export function setPlayerName(playerName) {
 window.showInfos = showInfos;
 window.setPlayerName = setPlayerName;
 
-
-
-// Clic Principal
 export function handleMainClick() {
-    // Le bouton utilise la valeur actuelle du clic définie dans le gameState
     addKnowledge(gameState.clickValue);
 }
 
@@ -122,6 +117,114 @@ export function handleBuyUpgrade(event) {
                 visualSource = 'images/era_medieval/pain_shiny.png';
             } else {
                 visualSource = 'images/era_medieval/pain.png';
+            }
+        }
+
+        if (upgradeId === 'oil_barrel') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PÉTROLE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Oil_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Oil.png';
+            }
+        }
+
+        if (upgradeId === 'computer') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("ORDINATEUR SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Computer_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Computer.png';
+            }
+        }
+
+        if (upgradeId === 'skyscraper') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("GRATTE-CIEL SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Skyscraper_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Skyscraper.png';
+            }
+        }
+
+        if (upgradeId === 'laser_gun') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("FUSIL SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Gun_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Gun.png';
+            }
+        }
+
+        if (upgradeId === 'robot') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("ROBOT SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Robot_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Robot.png';
+            }
+        }
+
+        if (upgradeId === 'shuttle') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("NAVETTE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Shuttle_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Shuttle.png';
+            }
+        }
+
+        if (upgradeId === 'soul_crystal') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PRISME SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Crystal_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Crystal.png';
+            }
+        }
+
+        if (upgradeId === 'holy_chalice') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("CALICE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Chalice_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Chalice.png';
+            }
+        }
+
+        if (upgradeId === 'seraph') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("SÉRAPHIN SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Angel_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Angel.png';
             }
         }
 
@@ -462,7 +565,7 @@ export async function sendAttack(target, attackValue) {
                 return;
             }else {
 
-                if (x == 0) { //L'attaquant perd toutes ses connaissances (Pire scénario pour lui (1%))
+                if (x == 0) {
 
                     const dataToSend = {
                         knowledge: 0, 
@@ -478,7 +581,7 @@ export async function sendAttack(target, attackValue) {
 
                 }
 
-                if (x >= 1 && x <= 10) { //L'attaquant perd 2x sa mise (10%)
+                if (x >= 1 && x <= 10) {
                                     
                     let newKnowledge;
                     if (gameState.knowledge >= 2*attackValue) {
@@ -504,7 +607,7 @@ export async function sendAttack(target, attackValue) {
                     }
                 }
             
-                if (x >= 11 && x <= 30) { //L'attaquant ne perd rien (Pas fou puisqu'il a dépensé de la connaissance (15%))
+                if (x >= 11 && x <= 30) {
 
                     let newKnowledge;
                     if (gameState.knowledge >= attackValue) {
@@ -518,8 +621,7 @@ export async function sendAttack(target, attackValue) {
                     alert("L'attaque a échoué, la cible s'en sort indemne")
                 }
             
-                if (x >= 31 && x <= 50) { //La cible perd 1000 connaissances (Bof(20%))
-            
+                if (x >= 31 && x <= 50) {
                     const response = await fetch(`http://localhost:8080/api/load/${target}`);
                             
                             if (response.ok) {
@@ -558,7 +660,7 @@ export async function sendAttack(target, attackValue) {
                     }
                 }
             
-                if (x >= 51 && x <= 95) { //La cible perd 2000 connaissances (Très bien(20%))
+                if (x >= 51 && x <= 95) {
             
                     const response = await fetch(`http://localhost:8080/api/load/${target}`);
                             
@@ -599,7 +701,7 @@ export async function sendAttack(target, attackValue) {
                     }
                 }
             
-                if (x >= 96 && x <= 99) { //Jackpot (10%)
+                if (x >= 96 && x <= 99) {
             
                     const response = await fetch(`http://localhost:8080/api/load/${target}`);
                             

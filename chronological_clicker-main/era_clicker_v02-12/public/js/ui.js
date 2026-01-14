@@ -2,7 +2,6 @@ import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
 import { formatNumber } from './utils.js';
 
-// Références DOM
 const knowledgeDisplay = document.getElementById('knowledge-display');
 const kpsDisplay = document.getElementById('kps-display');
 const eraDisplay = document.getElementById('era-display');
@@ -27,18 +26,15 @@ export function renderVisualCanvas() {
             element.src = visual.icon; 
             element.className = 'visual-upgrade-icon visual-image';
             
-            // --- AJOUT : Appliquer la taille personnalisée si elle existe ---
             if (visual.size) {
                 element.style.width = `${visual.size}px`;
                 element.style.height = `${visual.size}px`;
             }
-            // ---------------------------------------------------------------
 
         } else {
             element = document.createElement('div');
             element.innerText = visual.icon;
             element.className = 'visual-upgrade-icon';
-            // Pour les émojis, c'est le font-size qu'on change
             if (visual.size) {
                 element.style.fontSize = `${visual.size / 2}px`; 
             }
@@ -56,26 +52,36 @@ export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
     const finalIcon = visualSource || upgrade.icon;
     if (!finalIcon) return;
 
-    // Zones définies uniquement pour Pierre et Moyen Âge
     const zones = {
         stone_age: { 
-            'Pierre taillée': [3, 30, 15, 40], 
-            'Mammouth': [60, 85, 15, 50], 
-            'Cueilleur': [5, 85, 60, 80], 
-            def: [20, 80, 20, 80]
+            'Silex Ancestral': [3, 30, 15, 40, 60], 
+            'Mammouth Laineux': [60, 85, 15, 50, 120], 
+            'Tribu Nomade': [10, 85, 60, 80, 80], 
+            def: [20, 80, 20, 80, 90]
         },
         medieval_age: { 
-            'Parchemin': [3, 30, 15, 40, 60], 
-            'Pain': [60, 85, 15, 30, 40],
-            'Eglise': [15, 75, 60, 80, 150], 
+            'Manuscrit Interdit': [3, 30, 15, 40, 60], 
+            'Festin des Rois': [60, 85, 15, 30, 40],
+            'Abbaye Fortifiée': [15, 75, 60, 80, 150], 
             def: [10, 90, 20, 80, 90]
         },
         modern_age: {
-        // [minX, maxX, minY, maxY, SIZE]
-        'Baril de pétrole': [5, 90, 70, 90, 50],   // En bas, taille moyenne
-        'Ordinateur':       [5, 90, 50, 80, 40],   // Au milieu, petit
-        'Gratte-ciel':      [5, 90, 10, 50, 150],  // En haut (fond), TRÈS grand
-        def:                [10, 90, 20, 80, 60]
+            'Or Noir Raffiné': [60, 85, 15, 30, 50],
+            'Supercalculateur IA': [3, 30, 15, 40, 40],  
+            'Mégastructure Urbaine': [5, 85, 60, 80, 150], 
+            def: [10, 90, 20, 80, 60]
+        },
+        future_age: {
+            'Désintégrateur Plasma': [60, 85, 15, 30, 60],   
+            'Nanobots Réplicants': [3, 30, 15, 40, 50],   
+            'Croiseur Stellaire': [5, 85, 60, 80, 120],  
+            def: [10, 90, 20, 80, 60]
+        },
+        transcendent_age: {
+            'Prisme de Réalité': [60, 85, 15, 30, 50],   
+            'Source d\'Immortalité': [3, 30, 15, 40, 60],   
+            'Archange Omniscient': [5, 85, 60, 80, 100],    
+            def: [10, 90, 20, 80, 70]
         }
     };
 
@@ -124,14 +130,12 @@ export function updateUI() {
         advanceEraButton.style.display = 'none';
     }
 
-    // Boutons de navigation (précédent / suivant)
     prevEraButton.style.display = currentEraData.previousEra ? 'inline-block' : 'none';
     prevEraButton.innerText = `⬅️`;
     
     nextEraButton.style.display = (currentEraData.nextEra && gameState.currentEra !== gameState.maxEraReached) ? 'inline-block' : 'none';
     nextEraButton.innerText = `➡️`;
     
-    // Appel à React
     if (window.renderReactApp) {
         window.renderReactApp(upgrades, gameState.currentEra, gameState.knowledge);
     }
