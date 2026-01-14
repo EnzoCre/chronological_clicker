@@ -10,14 +10,29 @@ export const ERAS = {
         name: 'Moyen Âge',
         clickerText: '',
         nextEra: 'modern_age',            // Pas encore de suite
-        nextEraCost: 1000,
+        nextEraCost: 10000,
         previousEra: 'stone_age', // Retour vers l'Âge de Pierre
     },
     'modern_age': {
         name: 'Temps Actuel',
         clickerText: '',
-        nextEra: null,            // Ce sera le Cyberpunk plus tard
-        nextEraCost: 100000000,   // 100 Millions (exemple)
+        nextEra: 'cyberpunk_age',            
+        nextEraCost: 100000,   // 100 Millions (exemple)
         previousEra: 'medieval_age',
+    },
+    'cyberpunk_age': {
+        name: 'Cyberpunk',
+        clickerText: '',
+        nextEra: 'transcendant_age',            
+        nextEraCost: 1000000,   // 100 Millions (exemple)
+        previousEra: 'modern_age',
+    },
+    'transcendant_age': {
+        name: 'Âge Transcendant',
+        clickerText: '',
+        nextEra: null,            
+        nextEraCost: null,   // 100 Millions (exemple)
+        previousEra: 'cyberpunk_age',
     }
+
 };

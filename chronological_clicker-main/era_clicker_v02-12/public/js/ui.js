@@ -67,15 +67,27 @@ export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
         medieval_age: { 
             'Parchemin': [3, 30, 15, 40, 60], 
             'Pain': [60, 85, 15, 30, 40],
-            'Eglise': [15, 75, 60, 80, 150], 
+            'Eglise': [15, 75, 60, 80, 100], 
             def: [10, 90, 20, 80, 90]
         },
         modern_age: {
         // [minX, maxX, minY, maxY, SIZE]
-        'Baril de pétrole': [5, 90, 70, 90, 50],   // En bas, taille moyenne
-        'Ordinateur':       [5, 90, 50, 80, 40],   // Au milieu, petit
-        'Gratte-ciel':      [5, 90, 10, 50, 150],  // En haut (fond), TRÈS grand
-        def:                [10, 90, 20, 80, 60]
+        'Baril de pétrole': [60, 85, 15, 30, 40],   // En bas, taille moyenne
+        'Ordinateur':      [3, 30, 15, 40, 60],  // Au milieu, petit
+        'Gratte-ciel':      [15, 75, 60, 80, 100], 
+        def:                [10, 90, 20, 80, 90]
+        },
+cyberpunk_age: {
+            'Robot IA':         [3, 30, 15, 40, 60],   // Au sol
+            'Arme Laser':       [60, 85, 15, 30, 40],  // Mi-hauteur
+            'Vaisseau Spatial': [15, 75, 60, 80, 100], 
+            def:                [10, 90, 20, 80, 90]
+        },
+        transcendant_age: { 
+            'Cristal Cosmique': [60, 85, 15, 30, 40],  // Flottant bas/milieu
+            'Calice Sacré':     [3, 30, 15, 40, 60],  // Centre
+            'Être de Lumière':  [15, 75, 60, 80, 100],  
+            def:                [10, 90, 20, 80, 90]
         }
     };
 

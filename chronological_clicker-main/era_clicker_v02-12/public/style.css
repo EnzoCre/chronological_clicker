@@ -31,52 +31,100 @@ body {
 }
 
 
-
+/* --- ÂGE DE PIERRE --- */
 .era-stone_age {
-    
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/era_stone/era_stone_age.png');
-    background-size: cover, (120*6)px auto; 
+    /* CORRECTION : (120*6)px n'est pas valide en CSS pur. On met 720px. */
+    background-size: cover, 720px auto; 
     background-position: center, bottom left;
     background-repeat: no-repeat, repeat;
 }
 
+/* --- MOYEN ÂGE --- */
 .era-medieval_age {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/era_medieval/era_medieval_age.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/era_medieval/era_medieval_age.png');
+    background-size: cover, 720px auto; 
+    background-position: center, bottom left;
+    background-repeat: no-repeat, repeat;
 }
 
-/* Style du canvas (Le Territoire) pour le Moyen Âge */
 .era-medieval_age #visual-canvas {
     background-image: url('images/era_medieval/village_medieval.jpg');
     background-size: cover;
     background-position: center;
     image-rendering: pixelated;
-    border: 2px solid rgba(212, 175, 55, 0.5); /* Une petite bordure dorée pour faire classe */
+    border: 2px solid rgba(212, 175, 55, 0.5);
 }
 
+.era-medieval_age #main-click-button {
+    background-image: url('images/era_medieval/medieval_bouton.png');
+}
+
+/* --- TEMPS MODERNES --- */
 .era-modern_age {
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/era_modern/era_modern_age.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-size: cover, 720px auto; 
+    background-position: center, bottom left;
+    background-repeat: no-repeat, repeat;
 }
 
-/* Fond du territoire (Canvas) */
 .era-modern_age #visual-canvas {
-    background-image: url('images/era_modern/city_modern.png');
+    background-image: url('images/era_modern/city_modern.jpg'); 
     background-size: cover;
     background-position: center;
     image-rendering: pixelated;
-    border: 2px solid rgba(0, 255, 255, 0.5); /* Bordure néon bleu cyan */
+    border: 2px solid rgba(0, 255, 255, 0.5);
 }
 
-/* Bouton Central */
 .era-modern_age #main-click-button {
-    background-image: url('images/era_modern/Bouton_modern.png');
+    background-image: url('images/era_modern/Bouton_v1.png');
 }
 
+/* --- CYBERPUNK --- */
+.era-cyberpunk_age {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/era_cyberpunk/background_cyber.png');
+    background-size: cover, 720px auto; 
+    background-position: center, bottom left;
+    background-repeat: no-repeat, repeat;
+}
+
+.era-cyberpunk_age #visual-canvas {
+    background-image: url('images/era_cyberpunk/village_cyberpunk.jpg');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 15px #ff00ff;
+}
+
+.era-cyberpunk_age #main-click-button {
+    background-image: url('images/era_cyberpunk/Bouton_cyberpunk.png');
+}
+
+.era-transcendant_age {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url('images/era_transcendant/era_trans_age.png');
+    background-size: cover, 720px auto; 
+    background-position: center, bottom left;
+    background-repeat: no-repeat, repeat;
+}
+
+.era-transcendant_age #visual-canvas {
+    background-image: url('images/era_transcendant/village_trans.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 30px #ffffff;
+}
+
+.era-transcendant_age #main-click-button {
+    background-image: url('images/era_transcendant/Bouton_trans.png');
+}
+
+/* Animation optionnelle pour le fond transcendant */
+@keyframes galaxyMove {
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
+}
 
 
 
@@ -228,6 +276,12 @@ h2 {
     background: rgba(0, 0, 0, 0.2);
     border: 1px dashed rgba(255, 255, 255, 0.3);
     overflow: hidden;
+    width: 100%;           
+    max-width: 1000px;     
+    aspect-ratio: 16 / 9;  
+    margin: 0 auto;        
+    height: auto;          
+    position: relative;
 }
 
 
