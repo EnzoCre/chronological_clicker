@@ -4,7 +4,6 @@ import { calculateCost, formatNumber } from './utils.js';
 import { updateUI, addVisualToCanvas, renderVisualCanvas, updateUIleaderboard } from './ui.js';
 import md5 from 'https://esm.sh/md5';
 
-// Ajoute de la connaissance
 export function addKnowledge(amount) {
     if (typeof amount === 'number') {
         gameState.knowledge += amount;
@@ -29,9 +28,8 @@ export function setPlayerName(playerName) {
 window.showInfos = showInfos;
 window.setPlayerName = setPlayerName;
 
-// Clic Principal
+
 export function handleMainClick() {
-    // Le bouton utilise la valeur actuelle du clic définie dans le gameState
     addKnowledge(gameState.clickValue);
 }
 
@@ -216,6 +214,114 @@ export function handleBuyUpgrade(event) {
         }
 
         // --- FIN LOGIQUE SHINY ---
+
+        if (upgradeId === 'oil_barrel') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PÉTROLE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Oil_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Oil.png';
+            }
+        }
+
+        if (upgradeId === 'computer') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("ORDINATEUR SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Computer_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Computer.png';
+            }
+        }
+
+        if (upgradeId === 'skyscraper') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("GRATTE-CIEL SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_modern/Skyscraper_Shiny.png';
+            } else {
+                visualSource = 'images/era_modern/Skyscraper.png';
+            }
+        }
+
+        if (upgradeId === 'laser_gun') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("FUSIL SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Gun_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Gun.png';
+            }
+        }
+
+        if (upgradeId === 'robot') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("ROBOT SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Robot_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Robot.png';
+            }
+        }
+
+        if (upgradeId === 'shuttle') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("NAVETTE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_future/Shuttle_Shiny.png';
+            } else {
+                visualSource = 'images/era_future/Shuttle.png';
+            }
+        }
+
+        if (upgradeId === 'crystal') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("PRISME SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Crystal_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Crystal.png';
+            }
+        }
+
+        if (upgradeId === 'chalice') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("CALICE SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Chalice_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Chalice.png';
+            }
+        }
+
+        if (upgradeId === 'angel') {
+            isImage = true;
+            const luck = Math.floor(Math.random() * 5);
+            if (luck === 0) { 
+                console.log("SÉRAPHIN SHINY !");
+                valueToAdd = upgrade.value * 10; 
+                visualSource = 'images/era_transcendent/Angel_Shiny.png';
+            } else {
+                visualSource = 'images/era_transcendent/Angel.png';
+            }
+        }
 
         if (upgrade.type === 'click') {
             gameState.clickValue += valueToAdd;
@@ -486,36 +592,175 @@ export async function sendAttack(target, attackValue) {
                 alert("Pas assez de connaissance pour attaquer")
                 return;
             }else {
-                // ... (Reste de la logique d'attaque conservée telle quelle pour abréger, le coeur du changement est dans handleBuyUpgrade)
-                // Pour la lisibilité, je ne répète pas tout le bloc d'attaque qui est très long et inchangé
-                // Mais dans votre fichier final, gardez bien tout le code de sendAttack ici !
-                // Je vais remettre le début pour que vous puissiez coller sans perdre le fil.
-                
-                if (x == 0) { 
-                    const dataToSend = { knowledge: 0, kps: gameState.kps, clickValue: gameState.clickValue };
+
+                if (x == 0) {
+
+                    const dataToSend = {
+                        knowledge: 0, 
+                        kps: gameState.kps, 
+                        clickValue: gameState.clickValue
+                    };
+
                     updateDatabase(gameState.playerName,dataToSend);
                     gameState.knowledge=0;
                     printLeaderboard();
                     alert(`Aïe ! Vous avez tout perdu !!!`);
                 }
-                // ... suite des conditions x ...
-                // Je vous recommande de garder votre fonction sendAttack originale ici car elle est longue
-                // et n'a pas besoin de modification pour les nouvelles ères.
-                // Si vous voulez le code complet, demandez-le moi, mais le copier-coller du fichier original suffit.
-                
-                // Pour faire simple, voici la suite condensée (ne copiez pas ce commentaire, remplacez par votre fonction d'origine ou demandez le full code si besoin)
-                 if (x >= 1 && x <= 10) { // ... 
-                    let newKnowledge = (gameState.knowledge >= 2*attackValue) ? gameState.knowledge - 2*attackValue : 0;
+
+                if (x >= 1 && x <= 10) {
+                                    
+                    let newKnowledge;
+                    if (gameState.knowledge >= 2*attackValue) {
+                        newKnowledge = gameState.knowledge - 2*attackValue;
+                    } else {
+                        newKnowledge = 0;
+                    }
+
                     gameState.knowledge=newKnowledge;
                     const dataToSend = { knowledge: newKnowledge, kps: gameState.kps, clickValue: gameState.clickValue }; // Note: targetData undefined here in original snippet logic potentially? Be careful with copy paste
                     // Correction: dans le code original, il y avait des appels fetch manquants dans ce bloc précis, 
                     // mais je suppose que vous gardez votre logique existante.
                     alert(`Vous avez perdu ${2*attackValue} de connaisssance !!!`);
-                    // ...
-                 }
-                 // ... et les autres blocs ...
-                 // Code original sendAttack continue ici...
-            }
+                    printLeaderboard();
+                                
+            
+                    }
+                }
+            
+                if (x >= 11 && x <= 30) {
+
+                    let newKnowledge;
+                    if (gameState.knowledge >= attackValue) {
+                        newKnowledge = gameState.knowledge - attackValue;
+                    } else {
+                        newKnowledge = 0;
+                    }
+
+                    gameState.knowledge=newKnowledge;
+
+                    alert("L'attaque a échoué, la cible s'en sort indemne")
+                }
+            
+                if (x >= 31 && x <= 50) {
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+                                
+                                let newKnowledgePlayer;
+                                if (gameState.knowledge >= attackValue) {
+                                    newKnowledgePlayer = gameState.knowledge - attackValue;
+                                } else {
+                                    newKnowledgePlayer = 0;
+                                }
+
+                                gameState.knowledge=newKnowledgePlayer;
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= attackValue) {
+                                    newKnowledge = targetData.knowledge - attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(target, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez enlevé ${attackValue} de connaissance à ${targetData.playerName}`);
+                                    printLeaderboard();
+                                    createAttackDatabase(gameState.playerName,targetData.playerName,attackValue)
+                                }
+            
+                    }
+                }
+            
+                if (x >= 51 && x <= 95) {
+            
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                            if (response.ok) {
+                                const targetData = await response.json(); 
+
+                                let newKnowledgePlayer;
+                                if (gameState.knowledge >= attackValue) {
+                                    newKnowledgePlayer = gameState.knowledge - attackValue;
+                                } else {
+                                    newKnowledgePlayer = 0;
+                                }
+
+                                gameState.knowledge=newKnowledgePlayer;
+            
+                                
+                                let newKnowledge;
+                                if (targetData.knowledge >= 2*attackValue) {
+                                    newKnowledge = targetData.knowledge - 2*attackValue;
+                                } else {
+                                    newKnowledge = 0;
+                                }
+            
+                                const dataToSend = {
+                                    knowledge: newKnowledge,
+                                    kps: targetData.kps,         
+                                    clickValue: targetData.clickValue
+                                };
+            
+                                const result = await updateDatabase(target, dataToSend);
+            
+                                if (result.ok){
+                                    alert(`Vous avez enlevé ${2*attackValue} de connaissance à ${targetData.playerName}`);
+                                    printLeaderboard();
+                                    createAttackDatabase(gameState.playerName,targetData.playerName,2*attackValue)
+                                }
+            
+                    }
+                }
+            
+                if (x >= 96 && x <= 99) {
+            
+                    const response = await fetch(`http://localhost:8080/api/load/${target}`);
+                            
+                    if (response.ok) {
+                        const targetData = await response.json(); 
+                        
+                        let newKnowledgePlayer;
+                        if (gameState.knowledge >= attackValue) {
+                            newKnowledgePlayer = gameState.knowledge - attackValue;
+                        } else {
+                            newKnowledgePlayer = 0;
+                        }
+
+                        gameState.knowledge=newKnowledgePlayer;
+                        
+                        let newKnowledge;
+                        if (targetData.knowledge >= 10*attackValue) {
+                            newKnowledge = targetData.knowledge - 10*attackValue;
+                        } else {
+                            newKnowledge = 0;
+                        }
+    
+                        const dataToSend = {
+                            knowledge: newKnowledge,
+                            kps: targetData.kps,         
+                            clickValue: targetData.clickValue
+                        };
+    
+                        const result = await updateDatabase(target, dataToSend);
+    
+                        if (result.ok){
+                            alert(`Jackpot !!! Vous avez enlevé ${10*attackValue} de connaissance à ${targetData.playerName}`);
+                            printLeaderboard();
+                            createAttackDatabase(gameState.playerName,targetData.playerName,10*attackValue)
+                        }
+            
+                    }
+                }
+            
         } else {alert("Veuillez entrer un nombre valide pour l'attaque")}
         saveToSessionStorage();
     }

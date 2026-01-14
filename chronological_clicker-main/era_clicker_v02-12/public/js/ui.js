@@ -2,7 +2,6 @@ import { gameState, upgrades } from './state.js';
 import { ERAS } from './constants.js';
 import { formatNumber } from './utils.js';
 
-// Références DOM
 const knowledgeDisplay = document.getElementById('knowledge-display');
 const kpsDisplay = document.getElementById('kps-display');
 const eraDisplay = document.getElementById('era-display');
@@ -27,18 +26,15 @@ export function renderVisualCanvas() {
             element.src = visual.icon; 
             element.className = 'visual-upgrade-icon visual-image';
             
-            // --- AJOUT : Appliquer la taille personnalisée si elle existe ---
             if (visual.size) {
                 element.style.width = `${visual.size}px`;
                 element.style.height = `${visual.size}px`;
             }
-            // ---------------------------------------------------------------
 
         } else {
             element = document.createElement('div');
             element.innerText = visual.icon;
             element.className = 'visual-upgrade-icon';
-            // Pour les émojis, c'est le font-size qu'on change
             if (visual.size) {
                 element.style.fontSize = `${visual.size / 2}px`; 
             }
@@ -56,37 +52,36 @@ export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
     const finalIcon = visualSource || upgrade.icon;
     if (!finalIcon) return;
 
-    // Zones définies uniquement pour Pierre et Moyen Âge
     const zones = {
         stone_age: { 
-            'Pierre taillée': [3, 30, 15, 40], 
-            'Mammouth': [60, 85, 15, 50], 
-            'Cueilleur': [5, 85, 60, 80], 
-            def: [20, 80, 20, 80]
+            'Silex Ancestral': [3, 30, 15, 40, 60], 
+            'Mammouth Laineux': [60, 85, 15, 50, 120], 
+            'Tribu Nomade': [10, 85, 60, 80, 80], 
+            def: [20, 80, 20, 80, 90]
         },
         medieval_age: { 
-            'Parchemin': [3, 30, 15, 40, 60], 
-            'Pain': [60, 85, 15, 30, 40],
-            'Eglise': [15, 75, 60, 80, 100], 
+            'Manuscrit Interdit': [3, 30, 15, 40, 60], 
+            'Festin des Rois': [60, 85, 15, 30, 40],
+            'Abbaye Fortifiée': [15, 75, 60, 80, 100], 
             def: [10, 90, 20, 80, 90]
         },
         modern_age: {
         // [minX, maxX, minY, maxY, SIZE]
-        'Baril de pétrole': [60, 85, 15, 30, 40],   // En bas, taille moyenne
-        'Ordinateur':      [3, 30, 15, 40, 60],  // Au milieu, petit
-        'Gratte-ciel':      [15, 75, 60, 80, 100], 
+        'Or Noir Raffiné': [60, 85, 15, 30, 40],   // En bas, taille moyenne
+        'Supercalculateur IA':      [3, 30, 15, 40, 60],  // Au milieu, petit
+        'Mégastructure Urbaine':      [15, 75, 60, 80, 100], 
         def:                [10, 90, 20, 80, 90]
         },
-cyberpunk_age: {
-            'Robot IA':         [3, 30, 15, 40, 60],   // Au sol
-            'Arme Laser':       [60, 85, 15, 30, 40],  // Mi-hauteur
-            'Vaisseau Spatial': [15, 75, 60, 80, 100], 
+        cyberpunk_age: {
+            'Nanobots Réplicants':         [3, 30, 15, 40, 60],   // Au sol
+            'Désintégrateur Plasma':       [60, 85, 15, 30, 40],  // Mi-hauteur
+            'Croiseur Stellaire': [15, 75, 60, 80, 100], 
             def:                [10, 90, 20, 80, 90]
         },
         transcendant_age: { 
-            'Cristal Cosmique': [60, 85, 15, 30, 40],  // Flottant bas/milieu
-            'Calice Sacré':     [3, 30, 15, 40, 60],  // Centre
-            'Être de Lumière':  [15, 75, 60, 80, 100],  
+            'Prisme de Réalité': [60, 85, 15, 30, 40],  // Flottant bas/milieu
+            'Source d\'Immortalité':     [3, 30, 15, 40, 60],  // Centre
+            'Archange Omniscient':  [15, 75, 60, 80, 100],  
             def:                [10, 90, 20, 80, 90]
         }
     };
@@ -136,14 +131,12 @@ export function updateUI() {
         advanceEraButton.style.display = 'none';
     }
 
-    // Boutons de navigation (précédent / suivant)
     prevEraButton.style.display = currentEraData.previousEra ? 'inline-block' : 'none';
     prevEraButton.innerText = `⬅️`;
     
     nextEraButton.style.display = (currentEraData.nextEra && gameState.currentEra !== gameState.maxEraReached) ? 'inline-block' : 'none';
     nextEraButton.innerText = `➡️`;
     
-    // Appel à React
     if (window.renderReactApp) {
         window.renderReactApp(upgrades, gameState.currentEra, gameState.knowledge);
     }

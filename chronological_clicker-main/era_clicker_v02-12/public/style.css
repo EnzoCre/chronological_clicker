@@ -46,6 +46,7 @@ body {
     background-size: cover, 720px auto; 
     background-position: center, bottom left;
     background-repeat: no-repeat, repeat;
+
 }
 
 .era-medieval_age #visual-canvas {
@@ -66,10 +67,12 @@ body {
     background-size: cover, 720px auto; 
     background-position: center, bottom left;
     background-repeat: no-repeat, repeat;
+
 }
 
 .era-modern_age #visual-canvas {
     background-image: url('images/era_modern/city_modern.jpg'); 
+
     background-size: cover;
     background-position: center;
     image-rendering: pixelated;
@@ -127,6 +130,61 @@ body {
 }
 
 
+/* Style global Futur */
+.era-future_age {
+    background-color: #050011;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('images/era_future/era_future_age.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Fond du territoire (Canvas) */
+.era-future_age #visual-canvas {
+    background-color: #111;
+    background-image: url('images/era_future/village_futuriste.jpg');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    border: 2px solid #b026ff; /* Bordure violet néon */
+    box-shadow: 0 0 15px #b026ff;
+}
+
+/* Bouton Central */
+.era-future_age #main-click-button {
+    background-image: url('images/era_stone/Bouton_stone.png');
+}
+
+.era-transcendent_age {
+    background-color: #fff8e1; /* Fond clair par défaut */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('images/era_transcendent/era_transcendent_age.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffd700; /* Texte doré */
+}
+
+/* Le territoire */
+.era-transcendent_age #visual-canvas {
+    background-image: url('images/era_transcendent/paradise.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #fff;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); /* Halo doré */
+}
+
+/* Bouton Central */
+.era-transcendent_age #main-click-button {
+    background-image: url('images/era_stone/Bouton_stone.png');
+    filter: drop-shadow(0 0 10px gold); /* Le bouton brille */
+}
+
+/* Ajustement couleur texte pour cette ère claire (optionnel) */
+.era-transcendent_age .stat-label, 
+.era-transcendent_age p {
+    color: #ffffff;
+    text-shadow: 0 0 5px #000; /* Ombre pour lire sur fond clair */
+}
 
 .game-container {
     display: grid;

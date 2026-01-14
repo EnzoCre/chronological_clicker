@@ -2,16 +2,16 @@ export const ERAS = {
     'stone_age': {
         name: 'Âge de Pierre',
         clickerText: '',
-        nextEra: 'medieval_age',  // Lien direct vers le Moyen Âge
-        nextEraCost: 1000,        // Coût pour passer au Moyen Âge (ajuste si tu veux)
+        nextEra: 'medieval_age',
+        nextEraCost: 1000,  
         previousEra: null,
     },
     'medieval_age': {
         name: 'Moyen Âge',
         clickerText: '',
-        nextEra: 'modern_age',            // Pas encore de suite
-        nextEraCost: 10000,
-        previousEra: 'stone_age', // Retour vers l'Âge de Pierre
+        nextEra: 'modern_age',
+        nextEraCost: 1000,
+        previousEra: 'stone_age',
     },
     'modern_age': {
         name: 'Temps Actuel',
@@ -33,6 +33,7 @@ export const ERAS = {
         nextEra: null,            
         nextEraCost: null,   // 100 Millions (exemple)
         previousEra: 'cyberpunk_age',
+
     }
 
 };
