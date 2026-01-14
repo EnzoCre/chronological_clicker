@@ -62,31 +62,33 @@ export function addVisualToCanvas(upgrade, visualSource, isImage = false) {
         medieval_age: { 
             'Manuscrit Interdit': [3, 30, 15, 40, 60], 
             'Festin des Rois': [60, 85, 15, 30, 40],
-            'Abbaye Fortifiée': [15, 75, 60, 80, 100], 
+            'Abbaye Fortifiée': [15, 75, 60, 80, 150], 
             def: [10, 90, 20, 80, 90]
         },
         modern_age: {
-        // [minX, maxX, minY, maxY, SIZE]
-        'Or Noir Raffiné': [60, 85, 15, 30, 40],   // En bas, taille moyenne
-        'Supercalculateur IA':      [3, 30, 15, 40, 60],  // Au milieu, petit
-        'Mégastructure Urbaine':      [15, 75, 60, 80, 100], 
-        def:                [10, 90, 20, 80, 90]
+            'Or Noir Raffiné': [60, 85, 15, 30, 40], 
+            'Supercalculateur IA': [3, 30, 15, 40, 60],  
+            'Mégastructure Urbaine': [15, 75, 60, 80, 150], 
+            def: [10, 90, 20, 80, 90]
         },
         cyberpunk_age: {
-            'Nanobots Réplicants':         [3, 30, 15, 40, 60],   // Au sol
-            'Désintégrateur Plasma':       [60, 85, 15, 30, 40],  // Mi-hauteur
-            'Croiseur Stellaire': [15, 75, 60, 80, 100], 
-            def:                [10, 90, 20, 80, 90]
+            'Désintégrateur Plasma': [60, 85, 15, 30, 70],   
+            'Nanobots Réplicants': [3, 30, 15, 40, 100],   
+            'Croiseur Stellaire': [15, 75, 60, 80, 130], 
+            def: [10, 90, 20, 80, 90]
         },
-        transcendant_age: { 
-            'Prisme de Réalité': [60, 85, 15, 30, 40],  // Flottant bas/milieu
-            'Source d\'Immortalité':     [3, 30, 15, 40, 60],  // Centre
-            'Archange Omniscient':  [15, 75, 60, 80, 100],  
-            def:                [10, 90, 20, 80, 90]
+        transcendant_age: {
+            'Prisme de Réalité': [60, 85, 15, 30, 60],   
+            'Source d\'Immortalité': [3, 30, 15, 40, 100],   
+            'Archange Omniscient': [15, 75, 60, 80, 130],  
+            def: [10, 90, 20, 80, 90]
         }
     };
 
-    const [minX, maxX, minY, maxY, size] = zones[gameState.currentEra]?.[upgrade.name] || zones[gameState.currentEra]?.def || [10, 90, 10, 90, 90];
+    const currentZone = zones[gameState.currentEra] || {};
+    const config = currentZone[upgrade.name] || currentZone.def || [10, 90, 10, 90, 90];
+    
+    const [minX, maxX, minY, maxY, size] = config;
 
     gameState.visualState[gameState.currentEra].push({
         icon: finalIcon, 
@@ -108,7 +110,7 @@ export function updateUI() {
     const currentEraData = ERAS[gameState.currentEra];
     
     if (!currentEraData) {
-        console.error("Erreur critique : L'ère actuelle n'existe pas dans les constantes.", gameState.currentEra);
+        console.error("Erreur critique", gameState.currentEra);
         return;
     }
 
@@ -124,9 +126,11 @@ export function updateUI() {
     if (gameState.currentEra === gameState.maxEraReached && currentEraData.nextEra) {
         advanceEraButton.style.display = 'block';
         const cost = currentEraData.nextEraCost;
-        const nextEraName = ERAS[currentEraData.nextEra].name;
-        advanceEraButton.innerText = `Passer à l'Ère : ${nextEraName} (${formatNumber(cost)})`;
-        advanceEraButton.disabled = gameState.knowledge < cost;
+        if (ERAS[currentEraData.nextEra]) {
+            const nextEraName = ERAS[currentEraData.nextEra].name;
+            advanceEraButton.innerText = `Passer à l'Ère : ${nextEraName} (${formatNumber(cost)})`;
+            advanceEraButton.disabled = gameState.knowledge < cost;
+        }
     } else {
         advanceEraButton.style.display = 'none';
     }

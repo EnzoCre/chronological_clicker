@@ -10,7 +10,7 @@ export const ERAS = {
         name: 'Moyen Âge',
         clickerText: '',
         nextEra: 'modern_age',
-        nextEraCost: 1000,
+        nextEraCost: 10000,
         previousEra: 'stone_age',
     },
     'modern_age': {
