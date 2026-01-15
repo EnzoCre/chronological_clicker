@@ -29,7 +29,7 @@ Cliquez, accumulez, et voyagez dans le temps !
 
 * **1** Installer node.js
 * **2** Cloner le projet git.
-* **3** Exécuter le fichier "Lancement.btach".
+* **3** Exécuter le fichier "Lancement.bat".
 
 ---
 
