@@ -516,6 +516,15 @@ export async function register() {
         gameState.knowledge = 0;
         gameState.kps = 0;
         gameState.clickValue = 1;
+        gameState.currentEra = 'stone_age';
+
+        const upgradesOwned = {};
+
+        for (const [key, upgrade] of Object.entries(upgrades)) {
+            upgrade.owned = 0;
+            upgradesOwned[key] = 0;
+        }
+        
 
         const dataToSend = {
         playerName: pseudo,
@@ -523,7 +532,8 @@ export async function register() {
         knowledge: gameState.knowledge,
         kps: gameState.kps,
         clickValue: gameState.clickValue,
-        maxEraReached : "stone_age"
+        maxEraReached : "stone_age",
+        upgrades : upgradesOwned,
         };
 
         try {
